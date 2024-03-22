@@ -42,8 +42,9 @@ def roulette_wheel_selection(items, knapsack_max_capacity, population, n_selecti
             if temp_sum > end_point:
                 parents.append(population[j])
                 break
+
     temp_individuals = sorted(individual_fitness, key=lambda x: x[0])[
-                       len(individual_fitness) - n_elite - 1:len(individual_fitness) - 1]
+                       len(individual_fitness) - n_elite: len(individual_fitness)]
     elite_individuals = [population[temp_individuals[i][1]] for i in range(len(temp_individuals))]
 
     return parents, elite_individuals
@@ -68,6 +69,7 @@ def mutation(new_generation, mutation_prob):
         for i in range(len(individual)):
             if random.random() < mutation_prob:
                 individual[i] = not individual[i]
+
     return new_generation
 
 
@@ -77,8 +79,8 @@ print(items)
 population_size = 100
 generations = 200
 n_selection = 20
-n_elite = 10
-mutation_prob = 0.05
+n_elite = 3
+mutation_prob = 0.06
 
 start_time = time.time()
 best_solution = None
@@ -87,14 +89,12 @@ population_history = []
 best_history = []
 population = initial_population(len(items), population_size)
 for _ in range(generations):
-    population_history.append(population)
-
-    # TODO: implement genetic algorithm
-
     parents, elite_individuals = roulette_wheel_selection(items, knapsack_max_capacity, population, n_selection,
                                                           n_elite)
     population = mutation(crossover(parents, population_size, n_elite), mutation_prob)
     population += elite_individuals
+
+    population_history.append(population)
 
     best_individual, best_individual_fitness = population_best(items, knapsack_max_capacity, population)
     if best_individual_fitness > best_fitness:
