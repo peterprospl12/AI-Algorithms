@@ -11,18 +11,17 @@ def initialize_centroids_forgy(data, k):
 def initialize_centroids_kmeans_pp(data, k):
     indices = [random.choice([i for i in range(len(data))])]
     for _ in range(k-1):
-        closest_centroid_index = -1
-        closest_distance = float('inf')
+        furthest_centroid_index = -1
+        furthest_distance = -float('inf')
         for i, point in enumerate(data):
             if i in indices:
                 continue
             for index in indices:
                 distance = np.linalg.norm(data[index] - point)
-                if distance < closest_distance:
-                    closest_distance = distance
-                    closest_centroid_index = i
-        indices.append(closest_centroid_index)
-
+                if distance > furthest_distance:
+                    furthest_distance = distance
+                    furthest_centroid_index = i
+        indices.append(furthest_centroid_index)
     return data[indices]
 
 
